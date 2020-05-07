@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 
 import signInBackgroundImg from '../../assets/sign-in-background.png';
@@ -12,12 +12,29 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   display: flex;
-  margin: auto 0;
+  width: 100%;
+  max-width: 700px;
+`;
+
+const showFromLeft = keyframes`
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+export const AnimatedContent = styled.div`
+  display: flex;
   flex-direction: column;
   align-items: center;
 
-  width: 100%;
-  max-width: 700px;
+  margin: auto;
+
+  animation: ${showFromLeft} 1s;
 
   form {
     margin: 80px 0;
