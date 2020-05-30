@@ -4,6 +4,7 @@ import multer from 'multer';
 import multerConfig from '@config/upload';
 
 import UsersController from '../controllers/UsersController';
+import UserAvatarController from '../controllers/UserAvatarController';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const usersRouter = Router();
@@ -15,7 +16,7 @@ usersRouter.patch(
   '/avatar',
   ensureAuthenticated,
   upload.single('avatar'),
-  UsersController.update,
+  UserAvatarController.update,
 );
 
 export default usersRouter;
