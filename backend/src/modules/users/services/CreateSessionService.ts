@@ -1,31 +1,33 @@
-import { compare } from 'bcryptjs';
-import { Repository } from 'typeorm';
-import { sign } from 'jsonwebtoken';
-import authConfig from '../config/auth';
-import AppError from '../errors/AppError';
-import User from '../models/User.model';
+import { injectable, inject } from 'tsyringe';
 
-interface Request {
+import { compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
+
+import authConfig from '@config/auth';
+import AppError from '@shared/errors/AppError';
+
+import IUsersRepository from '../repositories/IUsersRepository';
+import User from '../infra/typeorm/entities/User.model';
+
+interface IRequest {
   email: string;
   password: string;
 }
 
-interface Response {
+interface IResponse {
   user: User;
   token: string;
 }
 
+@injectable()
 class CreateSessionService {
-  private usersRepository: Repository<User>;
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) {}
 
-  constructor(usersRepository: Repository<User>) {
-    this.usersRepository = usersRepository;
-  }
-
-  public async execute({ email, password }: Request): Promise<Response> {
-    const user = await this.usersRepository.findOne({
-      where: { email },
-    });
+  public async execute({ email, password }: IRequest): Promise<IResponse> {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
       throw new AppError('Invalid credentials.', 401);
