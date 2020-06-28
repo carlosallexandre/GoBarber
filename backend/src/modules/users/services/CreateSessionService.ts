@@ -45,9 +45,9 @@ class CreateSessionService {
       throw new AppError('Invalid credentials.', 401);
     }
 
-    const { secret, expiresIn } = authConfig.jwt;
+    const { expiresIn } = authConfig.jwt;
 
-    const token = sign({}, secret, {
+    const token = sign({}, 'secret', {
       subject: user.id,
       expiresIn,
     });

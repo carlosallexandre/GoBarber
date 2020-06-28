@@ -38,7 +38,7 @@ class CreateAppointmentService {
 
     const currentDate = Date.now();
 
-    if (isBefore(date, currentDate)) {
+    if (isBefore(appointmentDate.getTime(), currentDate)) {
       throw new AppError("You can't book an appointment in past date");
     }
 

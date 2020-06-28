@@ -64,14 +64,14 @@ describe('Create appointment', () => {
 
   it('should not be able to create an appointment on past date', async () => {
     const yesterdayDate = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      currentDate.getDate() - 1,
+      appointmentDate.getFullYear(),
+      appointmentDate.getMonth(),
+      appointmentDate.getDate() - 1,
     );
 
     await expect(
       createAppointmentService.execute({
-        date: new Date(yesterdayDate.setHours(8)),
+        date: new Date(yesterdayDate),
         provider_id: 'providerId',
         userId: 'userId',
       }),
@@ -81,7 +81,7 @@ describe('Create appointment', () => {
   it('should not be able to create an appointment outside 8am and 5pm', async () => {
     await expect(
       createAppointmentService.execute({
-        date: new Date(currentDate.setHours(7)),
+        date: new Date(appointmentDate.setHours(7)),
         provider_id: 'providerId',
         userId: 'userId',
       }),
@@ -89,7 +89,7 @@ describe('Create appointment', () => {
 
     await expect(
       createAppointmentService.execute({
-        date: new Date(currentDate.setHours(18)),
+        date: new Date(appointmentDate.setHours(18)),
         provider_id: 'providerId',
         userId: 'userId',
       }),
