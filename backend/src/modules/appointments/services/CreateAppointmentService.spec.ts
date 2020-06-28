@@ -1,20 +1,25 @@
 import AppError from '@shared/errors/AppError';
 
+import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
 import FakeAppointmentRepository from '../repositories/fakes/FakeAppointmentRepository';
 import CreateAppointmentService from './CreateAppointmentService';
 
+const currentDate: Date = new Date();
 let appointmentDate: Date;
+let fakeNotificationsRepository: FakeNotificationsRepository;
 let fakeAppointmentRepository: FakeAppointmentRepository;
 let createAppointmentService: CreateAppointmentService;
 
 describe('Create appointment', () => {
   beforeEach(() => {
+    fakeNotificationsRepository = new FakeNotificationsRepository();
     fakeAppointmentRepository = new FakeAppointmentRepository();
     createAppointmentService = new CreateAppointmentService(
       fakeAppointmentRepository,
+      fakeNotificationsRepository,
     );
 
-    appointmentDate = new Date(2020, 5, 25, 13);
+    appointmentDate = new Date(currentDate.setHours(10));
     jest
       .spyOn(Date, 'now')
       .mockImplementationOnce(() => new Date(2020, 5, 25, 12).getTime());
@@ -58,9 +63,15 @@ describe('Create appointment', () => {
   });
 
   it('should not be able to create an appointment on past date', async () => {
+    const yesterdayDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - 1,
+    );
+
     await expect(
       createAppointmentService.execute({
-        date: new Date(2020, 5, 25, 8),
+        date: new Date(yesterdayDate.setHours(8)),
         provider_id: 'providerId',
         userId: 'userId',
       }),
@@ -70,7 +81,7 @@ describe('Create appointment', () => {
   it('should not be able to create an appointment outside 8am and 5pm', async () => {
     await expect(
       createAppointmentService.execute({
-        date: new Date(2020, 5, 25, 7),
+        date: new Date(currentDate.setHours(7)),
         provider_id: 'providerId',
         userId: 'userId',
       }),
@@ -78,7 +89,7 @@ describe('Create appointment', () => {
 
     await expect(
       createAppointmentService.execute({
-        date: new Date(2020, 5, 25, 18),
+        date: new Date(currentDate.setHours(18)),
         provider_id: 'providerId',
         userId: 'userId',
       }),
