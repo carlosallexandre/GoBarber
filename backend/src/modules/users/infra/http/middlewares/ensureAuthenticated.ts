@@ -27,7 +27,7 @@ function ensureAuthenticated(
   try {
     const decoded = verify(token, secret);
 
-    const { sub } = decoded as TokenPayload;
+    const { sub } = decoded as ITokenPayload;
 
     request.user = {
       id: sub,

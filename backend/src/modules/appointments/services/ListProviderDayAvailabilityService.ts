@@ -1,7 +1,9 @@
 import { injectable, inject } from 'tsyringe';
-import { getHours, isAfter } from 'date-fns';
+import { getHours, isAfter, format } from 'date-fns';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
+import Appointment from '../infra/typeorm/entities/Appointment.model';
 
 interface IRequest {
   providerId: string;
@@ -20,6 +22,9 @@ class ListProviderDayAvailabilityService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentRepository: IAppointmentsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -28,19 +33,32 @@ class ListProviderDayAvailabilityService {
     month,
     year,
   }: IRequest): Promise<IResponse> {
-    const appointmentsInDay = await this.appointmentRepository.findAllInDayFromProvider(
-      {
-        providerId,
-        day,
-        month,
-        year,
-      },
+    const cacheKey = `provider-day-availability:${providerId}:${format(
+      new Date(year, month - 1, day),
+      'yyyyMMdd',
+    )}`;
+
+    let appointmentsInDay = await this.cacheProvider.recover<Appointment[]>(
+      cacheKey,
     );
+
+    if (!appointmentsInDay) {
+      appointmentsInDay = await this.appointmentRepository.findAllInDayFromProvider(
+        {
+          providerId,
+          day,
+          month,
+          year,
+        },
+      );
+
+      await this.cacheProvider.save(cacheKey, appointmentsInDay);
+    }
 
     const availability = [];
     for (let hour = 8; hour <= 17; hour += 1) {
       const hasAppointmentInHour = appointmentsInDay.find(
-        appointment => getHours(appointment.date) === hour,
+        appointment => getHours(new Date(appointment.date)) === hour,
       );
 
       const currentDate = Date.now();

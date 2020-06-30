@@ -1,5 +1,6 @@
 import AppError from '@shared/errors/AppError';
 
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
 import FakeAppointmentRepository from '../repositories/fakes/FakeAppointmentRepository';
 import CreateAppointmentService from './CreateAppointmentService';
@@ -8,15 +9,18 @@ const currentDate: Date = new Date();
 let appointmentDate: Date;
 let fakeNotificationsRepository: FakeNotificationsRepository;
 let fakeAppointmentRepository: FakeAppointmentRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let createAppointmentService: CreateAppointmentService;
 
 describe('Create appointment', () => {
   beforeEach(() => {
     fakeNotificationsRepository = new FakeNotificationsRepository();
     fakeAppointmentRepository = new FakeAppointmentRepository();
+    fakeCacheProvider = new FakeCacheProvider();
     createAppointmentService = new CreateAppointmentService(
       fakeAppointmentRepository,
       fakeNotificationsRepository,
+      fakeCacheProvider,
     );
 
     appointmentDate = new Date(currentDate.setHours(10));
@@ -64,9 +68,9 @@ describe('Create appointment', () => {
 
   it('should not be able to create an appointment on past date', async () => {
     const yesterdayDate = new Date(
-      appointmentDate.getFullYear(),
+      appointmentDate.getFullYear() - 1,
       appointmentDate.getMonth(),
-      appointmentDate.getDate() - 1,
+      appointmentDate.getDate(),
     );
 
     await expect(
