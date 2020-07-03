@@ -9,8 +9,10 @@ import ProvidersDayAvailabilityController from '../controllers/ProvidersDayAvail
 const providersRouter = Router();
 
 providersRouter.use(ensureAuthenticated);
+
 providersRouter.get('/', ProvidersController.index);
-providersRouter.post(
+
+providersRouter.get(
   '/:providerId/month-availability',
   celebrate({
     [Segments.PARAMS]: {
@@ -19,7 +21,8 @@ providersRouter.post(
   }),
   ProvidersMonthAvailabilityController.index,
 );
-providersRouter.post(
+
+providersRouter.get(
   '/:providerId/day-availability',
   celebrate({
     [Segments.PARAMS]: {

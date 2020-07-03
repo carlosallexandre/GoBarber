@@ -34,6 +34,7 @@ class CreateAppointmentService {
     const appointmentDate = startOfHour(date);
     const appointmentBooked = await this.appointmentsRepository.findByDate(
       appointmentDate,
+      provider_id,
     );
 
     if (appointmentBooked) {
@@ -71,6 +72,12 @@ class CreateAppointmentService {
 
     await this.cacheProvider.invalidate(
       `provider-day-availability:${provider_id}:${format(
+        appointmentDate,
+        'yyyyMMdd',
+      )}`,
+    );
+    await this.cacheProvider.invalidate(
+      `provider-appointments:${provider_id}:${format(
         appointmentDate,
         'yyyyMMdd',
       )}`,

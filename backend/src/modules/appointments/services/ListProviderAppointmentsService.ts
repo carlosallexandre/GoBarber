@@ -1,4 +1,6 @@
 import { injectable, inject } from 'tsyringe';
+import { format } from 'date-fns';
+import { classToClass } from 'class-transformer';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
@@ -27,16 +29,27 @@ class ListProviderAppointmentsService {
     month,
     year,
   }: IRequest): Promise<Appointment[]> {
-    const appointmentsInDay = await this.appointmentRepository.findAllInDayFromProvider(
-      {
+    const cacheKey = `provider-appointments:${providerId}:${format(
+      new Date(year, month - 1, day),
+      'yyyyMMdd',
+    )}`;
+
+    let appointments = await this.cacheProvider.recover<Appointment[]>(
+      cacheKey,
+    );
+
+    if (!appointments) {
+      appointments = await this.appointmentRepository.findAllInDayFromProvider({
         providerId,
         day,
         month,
         year,
-      },
-    );
+      });
 
-    return appointmentsInDay;
+      await this.cacheProvider.save(cacheKey, classToClass(appointments));
+    }
+
+    return appointments;
   }
 }
 
