@@ -27,10 +27,19 @@
     "uuidv4": "^6.0.8",
     "yup": "^0.28.5"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/components/**/*.tsx",
+      "src/pages/**/*.tsx",
+      "src/hooks/*.tsx",
+      "!src/hooks/index.tsx"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
