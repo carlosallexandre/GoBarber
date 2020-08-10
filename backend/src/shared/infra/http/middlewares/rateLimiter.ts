@@ -10,8 +10,8 @@ const redisClient = new Redis(
 
 const rateLimiterRedis = new RateLimiterRedis({
   storeClient: redisClient,
-  points: 25,
-  duration: 1,
+  points: 5,
+  duration: 5,
 });
 
 export default async function rateLimiter(
