@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import SignIn from '../../pages/SignIn';
 
@@ -34,7 +34,7 @@ describe('SignIn Page', () => {
   });
 
   it('sould be able to sign in', async () => {
-    const { getByPlaceholderText, getByText } = render(<SignIn />);
+    const { getByPlaceholderText, getByText,  } = render(<SignIn />);
 
     const emailField = getByPlaceholderText('E-mail');
     const passField = getByPlaceholderText('Senha');
@@ -44,7 +44,7 @@ describe('SignIn Page', () => {
     fireEvent.change(passField, { target: { value: '123456' }});
     fireEvent.click(buttonElement);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(mockedPushHistory).toHaveBeenCalledWith('/dashboard');
     })
   });
@@ -60,7 +60,7 @@ describe('SignIn Page', () => {
     fireEvent.change(passField, { target: { value: '123456' }});
     fireEvent.click(buttonElement);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(mockedPushHistory).not.toHaveBeenCalled();
     })
   });
@@ -78,7 +78,7 @@ describe('SignIn Page', () => {
     fireEvent.change(passField, { target: { value: '123456' }});
     fireEvent.click(buttonElement);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(mockedPushHistory).not.toHaveBeenCalled();
       expect(mockedAddToast).toHaveBeenCalledWith(
         expect.objectContaining({
