@@ -4,7 +4,7 @@ import { classToClass } from 'class-transformer';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
-import Appointment from '../infra/typeorm/entities/Appointment.model';
+import Appointment from '../infra/typeorm/entities/AppointmentModel';
 
 interface IRequest {
   providerId: string;

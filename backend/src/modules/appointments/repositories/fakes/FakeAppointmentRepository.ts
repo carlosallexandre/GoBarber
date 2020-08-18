@@ -6,7 +6,7 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 import IFindAllInDayFromProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
 import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
 
-import Appointment from '../../infra/typeorm/entities/Appointment.model';
+import Appointment from '../../infra/typeorm/entities/AppointmentModel';
 
 class AppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[];

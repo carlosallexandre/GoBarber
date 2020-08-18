@@ -1,5 +1,5 @@
 import IFindAllProvidersDTO from '@modules/users/dtos/IFindAllProvidersDTO';
-import User from '../infra/typeorm/entities/User.model';
+import User from '../infra/typeorm/entities/UserModel';
 import ICreateUserDTO from '../dtos/ICreateUserDTO';
 
 export default interface IUsersRepository {

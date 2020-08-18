@@ -4,7 +4,7 @@ import { startOfHour, isBefore, getHours, format } from 'date-fns';
 import AppError from '@shared/errors/AppError';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
-import Appointment from '../infra/typeorm/entities/Appointment.model';
+import Appointment from '../infra/typeorm/entities/AppointmentModel';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {

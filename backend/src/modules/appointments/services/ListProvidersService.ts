@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import User from '@modules/users/infra/typeorm/entities/User.model';
+import User from '@modules/users/infra/typeorm/entities/UserModel';
 
 interface IRequest {
   userId: string;

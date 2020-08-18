@@ -3,7 +3,7 @@ import { Repository, getRepository, Not } from 'typeorm';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 import IFindAllProvidersDTO from '@modules/users/dtos/IFindAllProvidersDTO';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import User from '../entities/User.model';
+import User from '../entities/UserModel';
 
 class UsersRepository implements IUsersRepository {
   private ormRepository: Repository<User>;

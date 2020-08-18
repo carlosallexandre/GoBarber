@@ -14,7 +14,7 @@ export default {
 
   defaults: {
     from: {
-      email: 'oi@callweb.dev',
+      email: 'no-reply@callweb.dev',
       name: 'callweb',
     },
   },
